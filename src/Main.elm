@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, div, option, select, text)
+import Html exposing (Html, button, div, option, select, text)
 import Html.Attributes exposing (disabled, id)
 
 
@@ -35,12 +35,20 @@ update msg meeting =
 
 view : Model -> Html msg
 view model =
-    div [] [ title ]
+    div []
+        [ title
+        , startButton
+        ]
 
 
 title : Html msg
 title =
     div [ id "title" ] [ text "Meeting price counter" ]
+
+
+startButton : Html msg
+startButton =
+    button [ id "startButton" ] [ text "Start counting" ]
 
 
 main =
