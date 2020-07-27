@@ -6,7 +6,7 @@ import Html.Attributes exposing (disabled, id)
 
 
 type alias Meeting =
-    { durationInSeconds : Int
+    { amountSpent : Int
     }
 
 
