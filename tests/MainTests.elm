@@ -1,8 +1,9 @@
 module MainTests exposing (..)
 
 import Expect exposing (Expectation)
-import Main exposing (TimerStatus(..), emptyMeeting, view)
+import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, view)
 import Test exposing (..)
+import Test.Html.Event as Event
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
 
@@ -30,4 +31,12 @@ suite =
         , test "timer shoud be Stoped" <|
             \_ ->
                 Expect.equal emptyMeeting.timerStatus Stoped
+        , describe "When clicking Start counting"
+            [ test "Should dispatch start Counting" <|
+                \_ ->
+                    emptyMeetingHtml
+                        |> Query.find [ Selector.id "startButton" ]
+                        |> Event.simulate Event.click
+                        |> Event.expect StartCounting
+            ]
         ]

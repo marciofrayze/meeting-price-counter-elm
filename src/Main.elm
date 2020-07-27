@@ -3,6 +3,7 @@ module Main exposing (..)
 import Browser
 import Html exposing (Html, button, div, option, select, text)
 import Html.Attributes exposing (disabled, id)
+import Html.Events exposing (onClick)
 
 
 type alias Meeting =
@@ -16,7 +17,7 @@ type alias Model =
 
 
 type Msg
-    = Tick
+    = StartCounting
 
 
 type TimerStatus
@@ -38,7 +39,7 @@ update msg meeting =
     meeting
 
 
-view : Model -> Html msg
+view : Model -> Html Msg
 view model =
     div []
         [ title
@@ -46,14 +47,18 @@ view model =
         ]
 
 
-title : Html msg
+title : Html Msg
 title =
     div [ id "title" ] [ text "Meeting price counter" ]
 
 
-startButton : Html msg
+startButton : Html Msg
 startButton =
-    button [ id "startButton" ] [ text "Start counting" ]
+    button
+        [ id "startButton"
+        , onClick StartCounting
+        ]
+        [ text "Start counting" ]
 
 
 main =
