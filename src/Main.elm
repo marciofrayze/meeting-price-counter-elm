@@ -7,6 +7,7 @@ import Html.Attributes exposing (disabled, id)
 
 type alias Meeting =
     { amountSpent : Int
+    , timerStatus : TimerStatus
     }
 
 
@@ -18,6 +19,10 @@ type Msg
     = Tick
 
 
+type TimerStatus
+    = Stoped
+
+
 initialModel : Model
 initialModel =
     emptyMeeting
@@ -25,7 +30,7 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0
+    Meeting 0 Stoped
 
 
 update : Msg -> Meeting -> Meeting

@@ -1,7 +1,7 @@
 module MainTests exposing (..)
 
 import Expect exposing (Expectation)
-import Main exposing (emptyMeeting, view)
+import Main exposing (TimerStatus(..), emptyMeeting, view)
 import Test exposing (..)
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
@@ -24,7 +24,10 @@ suite =
             \_ ->
                 emptyMeetingHtml
                     |> Query.has [ Selector.id "startButton" ]
-        , test "Amount spent in the meeting should be 0" <|
+        , test "amount spent in the meeting should be 0" <|
             \_ ->
                 Expect.equal emptyMeeting.amountSpent 0
+        , test "timer shoud be Stoped" <|
+            \_ ->
+                Expect.equal emptyMeeting.timerStatus Stoped
         ]
