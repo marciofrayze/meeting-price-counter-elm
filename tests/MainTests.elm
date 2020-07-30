@@ -6,7 +6,6 @@ import Test exposing (..)
 import Test.Html.Event as Event
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import Time
 import TimeHelper exposing (..)
 
 
@@ -67,7 +66,7 @@ suite =
                         ( updatedMeeting, _ ) =
                             update (Tick oneSecondInPosix) startedMeeting
                     in
-                    Expect.equal updatedMeeting.secondsElapsed 1
+                    Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
             ]
         , describe "When one second elapses and meeting is Stoped"
             [ test "shouldikeep the same amount of time elapsed" <|
@@ -76,12 +75,9 @@ suite =
                         stopedMeeting =
                             emptyMeeting
 
-                        oneSecondInPosix =
-                            Time.millisToPosix 1000
-
                         ( updatedMeeting, _ ) =
                             update (Tick oneSecondInPosix) stopedMeeting
                     in
-                    Expect.equal updatedMeeting.secondsElapsed 0
+                    Expect.equal updatedMeeting.timeElapsed zeroSecondsInPosix
             ]
         ]

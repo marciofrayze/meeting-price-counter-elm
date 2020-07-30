@@ -5,6 +5,7 @@ import Html exposing (Html, button, div, option, select, span, text)
 import Html.Attributes exposing (disabled, id)
 import Html.Events exposing (onClick)
 import Time
+import TimeHelper exposing (..)
 
 
 
@@ -26,7 +27,7 @@ main =
 
 type alias Meeting =
     { amountSpent : Int
-    , secondsElapsed : Int
+    , timeElapsed : Time.Posix
     , timerStatus : TimerStatus
     }
 
@@ -59,7 +60,7 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0 0 Stoped
+    Meeting 0 (Time.millisToPosix 0) Stoped
 
 
 
@@ -76,7 +77,7 @@ update msg meeting =
 
                 Tick _ ->
                     if meeting.timerStatus == Started then
-                        { meeting | secondsElapsed = meeting.secondsElapsed + 1 }
+                        { meeting | timeElapsed = addOneSecond meeting.timeElapsed }
 
                     else
                         meeting
@@ -128,6 +129,6 @@ timeElapsed meeting =
             ]
         , span
             [ id "timeElapsed" ]
-            [ text (String.fromInt meeting.secondsElapsed)
+            [ text (TimeHelper.formatTime meeting.timeElapsed)
             ]
         ]
