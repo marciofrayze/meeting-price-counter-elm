@@ -15,9 +15,13 @@ oneSecondInPosix =
 
 formatTime : Time.Posix -> String
 formatTime time =
-    time |> Time.toSecond Time.utc |> String.fromInt
+    time
+        |> Time.toSecond Time.utc
+        |> String.fromInt
 
 
 addOneSecond : Time.Posix -> Time.Posix
 addOneSecond time =
-    Time.millisToPosix (Time.posixToMillis time + 1000)
+    Time.posixToMillis time
+        + 1000
+        |> Time.millisToPosix
