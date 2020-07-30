@@ -1,13 +1,32 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, option, select, text)
+import Html exposing (Html, button, div, option, select, span, text)
 import Html.Attributes exposing (disabled, id)
 import Html.Events exposing (onClick)
+import Time
+
+
+
+-- MAIN
+
+
+main =
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
+
+
+
+-- MODEL
 
 
 type alias Meeting =
     { amountSpent : Int
+    , secondsElapsed : Int
     , timerStatus : TimerStatus
     }
 
@@ -16,12 +35,21 @@ type alias Model =
     Meeting
 
 
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( emptyMeeting
+    , Cmd.none
+    )
+
+
 type Msg
     = StartCounting
+    | Tick Time.Posix
 
 
 type TimerStatus
     = Stoped
+    | Started
 
 
 initialModel : Model
@@ -31,19 +59,50 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0 Stoped
+    Meeting 0 0 Stoped
 
 
-update : Msg -> Meeting -> Meeting
+
+-- UPDATE
+
+
+update : Msg -> Meeting -> ( Meeting, Cmd Msg )
 update msg meeting =
-    meeting
+    let
+        updatedMeeting =
+            case msg of
+                StartCounting ->
+                    { meeting | timerStatus = Started }
+
+                Tick _ ->
+                    if meeting.timerStatus == Started then
+                        { meeting | secondsElapsed = meeting.secondsElapsed + 1 }
+
+                    else
+                        meeting
+    in
+    ( updatedMeeting, Cmd.none )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Time.every 1000 Tick
+
+
+
+-- VIEW
 
 
 view : Model -> Html Msg
-view model =
+view meeting =
     div []
         [ title
         , startButton
+        , timeElapsed meeting
         ]
 
 
@@ -61,5 +120,14 @@ startButton =
         [ text "Start counting" ]
 
 
-main =
-    Browser.sandbox { init = emptyMeeting, update = update, view = view }
+timeElapsed : Meeting -> Html Msg
+timeElapsed meeting =
+    div []
+        [ span [ id "timeElapsedTitle" ]
+            [ text "Time elapsed: "
+            ]
+        , span
+            [ id "timeElapsed" ]
+            [ text (String.fromInt meeting.secondsElapsed)
+            ]
+        ]
