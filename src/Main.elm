@@ -90,7 +90,7 @@ update msg meeting =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Time.every 1000 Tick
 
 
