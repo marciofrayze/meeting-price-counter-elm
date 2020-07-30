@@ -4,3 +4,4 @@ elm-stuff
 repl-temp-*
 # build-release generated files
 build
+.coverage
