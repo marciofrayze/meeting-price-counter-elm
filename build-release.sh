@@ -16,12 +16,15 @@ set -e
 
 elm-test
 
-mkdir -p build
-js="build/meeting-price-counter.js"
-min="build/meeting-price-counter.min.js"
+mkdir -p build/js
+js="build/js/meeting-price-counter.js"
+min="build/js/meeting-price-counter.min.js"
 
 elm make src/Main.elm --optimize --output $js
 uglifyjs $js --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | uglifyjs --mangle --output $min
+
+echo "Copying resource/index.html to build folder"
+cp resources/index.html build/index.html
 
 echo "Compiled size:$(cat $js | wc -c) bytes  ($js)"
 echo "Minified size:$(cat $min | wc -c) bytes  ($min)"
