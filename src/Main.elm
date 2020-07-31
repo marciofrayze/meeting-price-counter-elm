@@ -117,6 +117,7 @@ startButton =
     button
         [ id "startButton"
         , onClick StartCounting
+        , disabled False
         ]
         [ text "Start counting" ]
 
