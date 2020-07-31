@@ -16,17 +16,17 @@ suite =
             view emptyMeeting
                 |> Query.fromHtml
     in
-    describe "View tests"
+    describe "Meeting price counter"
         [ describe "When entering the site"
             [ test "should see a title" <|
                 \_ ->
                     emptyMeetingHtml
                         |> Query.find [ Selector.id "title" ]
                         |> Query.has [ Selector.text "Meeting price counter" ]
-            , test "should see a start counting button" <|
+            , test "should see an enabled 'Start counting button" <|
                 \_ ->
                     emptyMeetingHtml
-                        |> Query.has [ Selector.id "startButton" ]
+                        |> Query.has [ Selector.id "startButton", Selector.disabled False ]
             , test "should see the time elapsed as 0" <|
                 \_ ->
                     emptyMeetingHtml
@@ -47,29 +47,8 @@ suite =
                         |> Event.simulate Event.click
                         |> Event.expect StartCounting
             ]
-        , describe "When StartCounting is receive"
-            [ test "should change meeting status to Started" <|
-                \_ ->
-                    let
-                        ( updatedMeeting, _ ) =
-                            update StartCounting emptyMeeting
-                    in
-                    Expect.equal updatedMeeting.timerStatus Started
-            ]
-        , describe "When one second elapses and meeting is Started"
-            [ test "should increment in 1 second in the meeting time elapsed" <|
-                \_ ->
-                    let
-                        startedMeeting =
-                            { emptyMeeting | timerStatus = Started }
-
-                        ( updatedMeeting, _ ) =
-                            update (Tick oneSecondInPosix) startedMeeting
-                    in
-                    Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
-            ]
         , describe "When one second elapses and meeting is Stoped"
-            [ test "shouldikeep the same amount of time elapsed" <|
+            [ test "should keep the same amount of time elapsed" <|
                 \_ ->
                     let
                         stopedMeeting =
@@ -79,5 +58,28 @@ suite =
                             update (Tick oneSecondInPosix) stopedMeeting
                     in
                     Expect.equal updatedMeeting.timeElapsed zeroSecondsInPosix
+            ]
+        , describe "When StartCounting is receive"
+            [ test "should change meeting status to Started" <|
+                \_ ->
+                    let
+                        ( updatedMeeting, _ ) =
+                            update StartCounting emptyMeeting
+                    in
+                    Expect.equal updatedMeeting.timerStatus Started
+            ]
+        , describe "Meeting in progress"
+            [ describe "When one second elapses and meeting is Started"
+                [ test "should increment in 1 second in the meeting time elapsed" <|
+                    \_ ->
+                        let
+                            startedMeeting =
+                                { emptyMeeting | timerStatus = Started }
+
+                            ( updatedMeeting, _ ) =
+                                update (Tick oneSecondInPosix) startedMeeting
+                        in
+                        Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
+                ]
             ]
         ]
