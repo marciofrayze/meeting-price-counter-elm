@@ -15,6 +15,13 @@ suite =
         emptyMeetingHtml =
             view emptyMeeting
                 |> Query.fromHtml
+
+        startedMeeting =
+            { emptyMeeting | timerStatus = Started }
+
+        startedMeetingHtml =
+            view startedMeeting
+                |> Query.fromHtml
     in
     describe "Meeting price counter"
         [ describe "When entering the site"
@@ -23,10 +30,22 @@ suite =
                     emptyMeetingHtml
                         |> Query.find [ Selector.id "title" ]
                         |> Query.has [ Selector.text "Meeting price counter" ]
-            , test "should see an enabled 'Start counting button" <|
+            , test "should see an enabled 'Start counting' button" <|
                 \_ ->
                     emptyMeetingHtml
-                        |> Query.has [ Selector.id "startButton", Selector.disabled False ]
+                        |> Query.has
+                            [ Selector.id "stopButton"
+                            , Selector.disabled True
+                            , Selector.text "Start counting"
+                            ]
+            , test "should see a disabled 'Stop counting' button" <|
+                \_ ->
+                    emptyMeetingHtml
+                        |> Query.has
+                            [ Selector.id "startButton"
+                            , Selector.disabled False
+                            , Selector.text "Stop counting"
+                            ]
             , test "should see the time elapsed as 0" <|
                 \_ ->
                     emptyMeetingHtml
@@ -68,18 +87,23 @@ suite =
                     in
                     Expect.equal updatedMeeting.timerStatus Started
             ]
-        , describe "Meeting in progress"
-            [ describe "When one second elapses and meeting is Started"
-                [ test "should increment in 1 second in the meeting time elapsed" <|
-                    \_ ->
-                        let
-                            startedMeeting =
-                                { emptyMeeting | timerStatus = Started }
-
-                            ( updatedMeeting, _ ) =
-                                update (Tick oneSecondInPosix) startedMeeting
-                        in
-                        Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
-                ]
+        , describe "When meeting is in progress"
+            [ test "should increment in 1 second in the meeting time elapsed" <|
+                \_ ->
+                    let
+                        ( updatedMeeting, _ ) =
+                            update (Tick oneSecondInPosix) startedMeeting
+                    in
+                    Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
+            , test "'Star Counting' button should be disabled" <|
+                \_ ->
+                    startedMeetingHtml
+                        |> Query.find [ Selector.id "startButton" ]
+                        |> Query.has [ Selector.disabled True ]
+            , test "'Stop Counting' button should be enabled" <|
+                \_ ->
+                    startedMeetingHtml
+                        |> Query.find [ Selector.id "stopButton" ]
+                        |> Query.has [ Selector.disabled False ]
             ]
         ]

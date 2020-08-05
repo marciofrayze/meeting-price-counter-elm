@@ -102,7 +102,8 @@ view : Model -> Html Msg
 view meeting =
     div []
         [ title
-        , startButton
+        , startButton meeting
+        , stopButton meeting
         , timeElapsed meeting
         ]
 
@@ -112,14 +113,31 @@ title =
     div [ id "title" ] [ text "Meeting price counter" ]
 
 
-startButton : Html Msg
-startButton =
+startButton : Meeting -> Html Msg
+startButton meeting =
+    let
+        isDisabled =
+            meeting.timerStatus /= Stoped
+    in
     button
         [ id "startButton"
         , onClick StartCounting
-        , disabled False
+        , disabled isDisabled
         ]
         [ text "Start counting" ]
+
+
+stopButton : Meeting -> Html Msg
+stopButton meeting =
+    let
+        isDisabled =
+            meeting.timerStatus == Stoped
+    in
+    button
+        [ id "stopButton"
+        , disabled isDisabled
+        ]
+        [ text "Stop counting" ]
 
 
 timeElapsed : Meeting -> Html Msg
