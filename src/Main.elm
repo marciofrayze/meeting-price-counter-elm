@@ -45,11 +45,12 @@ init _ =
 
 type Msg
     = StartCounting
+    | PauseCounting
     | Tick Time.Posix
 
 
 type TimerStatus
-    = Stoped
+    = Paused
     | Started
 
 
@@ -60,7 +61,7 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0 (Time.millisToPosix 0) Stoped
+    Meeting 0 (Time.millisToPosix 0) Paused
 
 
 
@@ -74,6 +75,9 @@ update msg meeting =
             case msg of
                 StartCounting ->
                     { meeting | timerStatus = Started }
+
+                PauseCounting ->
+                    { meeting | timerStatus = Paused }
 
                 Tick _ ->
                     if meeting.timerStatus == Started then
@@ -103,7 +107,8 @@ view meeting =
     div []
         [ title
         , startButton meeting
-        , stopButton meeting
+        , pauseButton meeting
+        , resetButton
         , timeElapsed meeting
         ]
 
@@ -117,7 +122,7 @@ startButton : Meeting -> Html Msg
 startButton meeting =
     let
         isDisabled =
-            meeting.timerStatus /= Stoped
+            meeting.timerStatus /= Paused
     in
     button
         [ id "startButton"
@@ -127,17 +132,27 @@ startButton meeting =
         [ text "Start counting" ]
 
 
-stopButton : Meeting -> Html Msg
-stopButton meeting =
+pauseButton : Meeting -> Html Msg
+pauseButton meeting =
     let
         isDisabled =
-            meeting.timerStatus == Stoped
+            meeting.timerStatus == Paused
     in
     button
-        [ id "stopButton"
+        [ id "pauseButton"
+        , onClick PauseCounting
         , disabled isDisabled
         ]
-        [ text "Stop counting" ]
+        [ text "Pause" ]
+
+
+resetButton : Html Msg
+resetButton =
+    button
+        [ id "resetButton"
+        , disabled True
+        ]
+        [ text "Reset" ]
 
 
 timeElapsed : Meeting -> Html Msg
