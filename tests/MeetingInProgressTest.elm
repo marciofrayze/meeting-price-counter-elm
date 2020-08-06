@@ -12,17 +12,24 @@ import TimeHelper exposing (..)
 suite : Test
 suite =
     let
-        startedMeeting =
+        startedMeetingWithOneSecondElapsed =
             { emptyMeeting | timerStatus = Started }
 
-        startedMeetingHtml =
-            view startedMeeting
+        startedMeetingWithNoTimeElapsed =
+            { emptyMeeting | timerStatus = Started }
+
+        startedMeetingWithNoTimeElapsedHtml =
+            view startedMeetingWithNoTimeElapsed
+                |> Query.fromHtml
+
+        startedMeetingWithOneSecondElapsedHtml =
+            view startedMeetingWithNoTimeElapsed
                 |> Query.fromHtml
     in
     describe "User is in a in progress meeting"
         [ test "should see a disabled 'Reset' button" <|
             \_ ->
-                startedMeetingHtml
+                startedMeetingWithOneSecondElapsedHtml
                     |> Query.has
                         [ Selector.id "resetButton"
                         , Selector.disabled True
@@ -32,23 +39,23 @@ suite =
             \_ ->
                 let
                     ( updatedMeeting, _ ) =
-                        update (Tick oneSecondInPosix) startedMeeting
+                        update (Tick oneSecondInPosix) startedMeetingWithOneSecondElapsed
                 in
                 Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
         , test "should see a disabled 'Star counting' button" <|
             \_ ->
-                startedMeetingHtml
+                startedMeetingWithNoTimeElapsedHtml
                     |> Query.find [ Selector.id "startButton" ]
                     |> Query.has [ Selector.disabled True ]
         , test "should see an enabled 'Pause' button" <|
             \_ ->
-                startedMeetingHtml
+                startedMeetingWithNoTimeElapsedHtml
                     |> Query.find [ Selector.id "pauseButton" ]
                     |> Query.has [ Selector.disabled False ]
         , describe "When clicking 'Pause'"
             [ test "should dispatch PauseCounting" <|
                 \_ ->
-                    startedMeetingHtml
+                    startedMeetingWithNoTimeElapsedHtml
                         |> Query.find [ Selector.id "pauseButton" ]
                         |> Event.simulate Event.click
                         |> Event.expect PauseCounting

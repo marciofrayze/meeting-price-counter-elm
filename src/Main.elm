@@ -4,7 +4,7 @@ import Browser
 import Html exposing (Html, button, div, option, select, span, text)
 import Html.Attributes exposing (disabled, id)
 import Html.Events exposing (onClick)
-import Time
+import Time exposing (toSecond, utc)
 import TimeHelper exposing (..)
 
 
@@ -46,6 +46,7 @@ init _ =
 type Msg
     = StartCounting
     | PauseCounting
+    | ResetCounting
     | Tick Time.Posix
 
 
@@ -79,6 +80,17 @@ update msg meeting =
                 PauseCounting ->
                     { meeting | timerStatus = Paused }
 
+                ResetCounting ->
+                    let
+                        timeElapsedInSecods =
+                            Time.toSecond Time.utc meeting.timeElapsed
+                    in
+                    if timeElapsedInSecods > 0 then
+                        { meeting | timeElapsed = zeroSecondsInPosix }
+
+                    else
+                        meeting
+
                 Tick _ ->
                     if meeting.timerStatus == Started then
                         { meeting | timeElapsed = addOneSecond meeting.timeElapsed }
@@ -105,21 +117,21 @@ subscriptions _ =
 view : Model -> Html Msg
 view meeting =
     div []
-        [ title
-        , startButton meeting
-        , pauseButton meeting
-        , resetButton
-        , timeElapsed meeting
+        [ titleDiv
+        , startButtonDiv meeting
+        , pauseButtonDiv meeting
+        , resetButtonDiv meeting
+        , timeElapsedDiv meeting
         ]
 
 
-title : Html Msg
-title =
+titleDiv : Html Msg
+titleDiv =
     div [ id "title" ] [ text "Meeting price counter" ]
 
 
-startButton : Meeting -> Html Msg
-startButton meeting =
+startButtonDiv : Meeting -> Html Msg
+startButtonDiv meeting =
     let
         isDisabled =
             meeting.timerStatus /= Paused
@@ -132,8 +144,8 @@ startButton meeting =
         [ text "Start counting" ]
 
 
-pauseButton : Meeting -> Html Msg
-pauseButton meeting =
+pauseButtonDiv : Meeting -> Html Msg
+pauseButtonDiv meeting =
     let
         isDisabled =
             meeting.timerStatus == Paused
@@ -146,17 +158,23 @@ pauseButton meeting =
         [ text "Pause" ]
 
 
-resetButton : Html Msg
-resetButton =
+resetButtonDiv : Meeting -> Html Msg
+resetButtonDiv meeting =
+    let
+        isDisabled =
+            (timeElapsedInSeconds meeting.timeElapsed == 0)
+                || (meeting.timerStatus /= Paused)
+    in
     button
         [ id "resetButton"
-        , disabled True
+        , onClick ResetCounting
+        , disabled isDisabled
         ]
         [ text "Reset" ]
 
 
-timeElapsed : Meeting -> Html Msg
-timeElapsed meeting =
+timeElapsedDiv : Meeting -> Html Msg
+timeElapsedDiv meeting =
     div []
         [ span [ id "timeElapsedTitle" ]
             [ text "Time elapsed: "

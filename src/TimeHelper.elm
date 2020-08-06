@@ -1,6 +1,6 @@
 module TimeHelper exposing (..)
 
-import Time
+import Time exposing (toSecond, utc)
 
 
 zeroSecondsInPosix : Time.Posix
@@ -25,3 +25,8 @@ addOneSecond time =
     Time.posixToMillis time
         + 1000
         |> Time.millisToPosix
+
+
+timeElapsedInSeconds : Time.Posix -> Int
+timeElapsedInSeconds timeElapsed =
+    toSecond utc timeElapsed
