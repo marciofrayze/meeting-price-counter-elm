@@ -3,4 +3,5 @@ if ! [ -x "$(command -v elm)" ]; then
 fi
 
 echo "Go to: http://localhost:8000/src/Main.elm"
+sleep 1 && firefox http://localhost:8000/src/Main.elm &&
 elm reactor
