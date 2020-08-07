@@ -122,6 +122,7 @@ view meeting =
         , pauseButtonDiv meeting
         , resetButtonDiv meeting
         , timeElapsedDiv meeting
+        , amountSpentDiv
         ]
 
 
@@ -182,5 +183,18 @@ timeElapsedDiv meeting =
         , span
             [ id "timeElapsed" ]
             [ text (TimeHelper.formatTime meeting.timeElapsed)
+            ]
+        ]
+
+
+amountSpentDiv : Html Msg
+amountSpentDiv =
+    div []
+        [ span [ id "amountSpentTitle" ]
+            [ text "Amount spent: "
+            ]
+        , span
+            [ id "amountSpent" ]
+            [ text "0"
             ]
         ]

@@ -52,7 +52,8 @@ suite =
                 startedMeetingWithNoTimeElapsedHtml
                     |> Query.find [ Selector.id "pauseButton" ]
                     |> Query.has [ Selector.disabled False ]
-        , describe "When clicking 'Pause'"
+        , describe
+            "When clicking 'Pause'"
             [ test "should dispatch PauseCounting" <|
                 \_ ->
                     startedMeetingWithNoTimeElapsedHtml

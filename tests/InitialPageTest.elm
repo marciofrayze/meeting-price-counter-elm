@@ -51,6 +51,11 @@ suite =
                 emptyMeetingHtml
                     |> Query.find [ Selector.id "timeElapsed" ]
                     |> Query.has [ Selector.text "0" ]
+        , test "should see the amount spent as 0" <|
+            \_ ->
+                emptyMeetingHtml
+                    |> Query.find [ Selector.id "amountSpent" ]
+                    |> Query.has [ Selector.text "0" ]
         , test "amount spent in the meeting should be 0" <|
             \_ ->
                 Expect.equal emptyMeeting.amountSpent 0
