@@ -1,6 +1,6 @@
 module MeetingInProgressTest exposing (..)
 
-import Expect exposing (Expectation)
+import Expect exposing (Expectation, FloatingPointTolerance(..))
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, update, view)
 import Test exposing (..)
 import Test.Html.Event as Event
@@ -13,7 +13,10 @@ suite : Test
 suite =
     let
         startedMeetingWithOneSecondElapsed =
-            { emptyMeeting | timerStatus = Started }
+            { emptyMeeting
+                | timerStatus = Started
+                , timeElapsed = TimeHelper.oneSecondInPosix
+            }
 
         startedMeetingWithNoTimeElapsed =
             { emptyMeeting | timerStatus = Started }
@@ -39,9 +42,16 @@ suite =
             \_ ->
                 let
                     ( updatedMeeting, _ ) =
-                        update (Tick oneSecondInPosix) startedMeetingWithOneSecondElapsed
+                        update (Tick oneSecondInPosix) startedMeetingWithNoTimeElapsed
                 in
                 Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
+        , test "should increment 0.005 in amount spent when a second is elapsed" <|
+            \_ ->
+                let
+                    ( updatedMeeting, _ ) =
+                        update (Tick oneSecondInPosix) startedMeetingWithOneSecondElapsed
+                in
+                Expect.within (Absolute 0.000001) updatedMeeting.amountSpent 0.005
         , test "should see a disabled 'Star counting' button" <|
             \_ ->
                 startedMeetingWithNoTimeElapsedHtml
