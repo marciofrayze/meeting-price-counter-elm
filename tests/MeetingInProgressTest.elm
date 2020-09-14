@@ -45,13 +45,16 @@ suite =
                         update (Tick oneSecondInPosix) startedMeetingWithNoTimeElapsed
                 in
                 Expect.equal updatedMeeting.timeElapsed oneSecondInPosix
-        , test "should increment 0.005 in amount spent when a second is elapsed" <|
+        , test "should increment the current amount spent when a second is elapsed" <|
             \_ ->
                 let
+                    startedMeetingWithHighAverageSalary =
+                        { startedMeetingWithNoTimeElapsed | averageSalaryPerMonthPerAtendee = 30000 }
+
                     ( updatedMeeting, _ ) =
-                        update (Tick oneSecondInPosix) startedMeetingWithOneSecondElapsed
+                        update (Tick oneSecondInPosix) startedMeetingWithHighAverageSalary
                 in
-                Expect.within (Absolute 0.000001) updatedMeeting.amountSpent 0.005
+                Expect.within (Absolute 0.000001) updatedMeeting.amountSpent 0.416666667
         , test "should see a disabled 'Star counting' button" <|
             \_ ->
                 startedMeetingWithNoTimeElapsedHtml

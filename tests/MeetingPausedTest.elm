@@ -27,6 +27,12 @@ suite =
         pausedMeetingWithTimeElapsedHtml =
             view pausedMeetingWithTimeElapsed
                 |> Query.fromHtml
+
+        pausedMeetingWithTimeElapsedAndSomeAmountSpent =
+            { pausedMeeting
+                | timeElapsed = oneSecondInPosix
+                , amountSpent = 500
+            }
     in
     describe "User is in a Paused meeting"
         [ test "should see an enabled 'Start counting' button" <|
@@ -58,7 +64,7 @@ suite =
                     Expect.equal updatedMeeting.timeElapsed zeroSecondsInPosix
             ]
         , describe "when clicking 'Reset'"
-            [ test "should dispatch ResetMeeting" <|
+            [ test "should dispatch ResetCounting" <|
                 \_ ->
                     pausedMeetingWithTimeElapsedHtml
                         |> Query.find [ Selector.id "resetButton" ]
@@ -73,5 +79,12 @@ suite =
                             update ResetCounting pausedMeetingWithTimeElapsed
                     in
                     Expect.equal updatedMeeting.timeElapsed zeroSecondsInPosix
+            , test "should set amount spent to 0" <|
+                \_ ->
+                    let
+                        ( updatedMeeting, _ ) =
+                            update ResetCounting pausedMeetingWithTimeElapsedAndSomeAmountSpent
+                    in
+                    Expect.equal updatedMeeting.amountSpent 0
             ]
         ]

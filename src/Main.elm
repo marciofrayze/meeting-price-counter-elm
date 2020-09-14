@@ -2,8 +2,9 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Html, button, div, option, select, span, text)
-import Html.Attributes exposing (disabled, id)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (disabled, id, value)
+import Html.Events exposing (on, onClick)
+import Json.Decode exposing (Decoder, at, field, int, map, string)
 import Time exposing (toSecond, utc)
 import TimeHelper exposing (..)
 
@@ -25,10 +26,15 @@ main =
 -- MODEL
 
 
+type alias Salary =
+    Float
+
+
 type alias Meeting =
-    { amountSpent : Int
+    { amountSpent : Float
     , timeElapsed : Time.Posix
     , timerStatus : TimerStatus
+    , averageSalaryPerMonthPerAtendee : Salary
     }
 
 
@@ -47,6 +53,7 @@ type Msg
     = StartCounting
     | PauseCounting
     | ResetCounting
+    | AverageSalarySelected String
     | Tick Time.Posix
 
 
@@ -62,7 +69,7 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0 (Time.millisToPosix 0) Paused
+    Meeting 0 (Time.millisToPosix 0) Paused 0
 
 
 
@@ -86,17 +93,34 @@ update msg meeting =
                             Time.toSecond Time.utc meeting.timeElapsed
                     in
                     if timeElapsedInSecods > 0 then
-                        { meeting | timeElapsed = zeroSecondsInPosix }
+                        { meeting
+                            | timeElapsed = zeroSecondsInPosix
+                            , amountSpent = 0
+                        }
 
                     else
                         meeting
 
                 Tick _ ->
                     if meeting.timerStatus == Started then
-                        { meeting | timeElapsed = addOneSecond meeting.timeElapsed }
+                        let
+                            amountSpendInThisElapsedSecond =
+                                meeting.averageSalaryPerMonthPerAtendee / 60 / 60 / 20
+                        in
+                        { meeting
+                            | timeElapsed = addOneSecond meeting.timeElapsed
+                            , amountSpent = meeting.amountSpent + amountSpendInThisElapsedSecond
+                        }
 
                     else
                         meeting
+
+                AverageSalarySelected selectedAverageSalary ->
+                    { meeting
+                        | averageSalaryPerMonthPerAtendee =
+                            String.toFloat selectedAverageSalary
+                                |> Maybe.withDefault 0
+                    }
     in
     ( updatedMeeting, Cmd.none )
 
@@ -118,17 +142,50 @@ view : Model -> Html Msg
 view meeting =
     div []
         [ titleDiv
+        , averageSalaryDiv
         , startButtonDiv meeting
         , pauseButtonDiv meeting
         , resetButtonDiv meeting
         , timeElapsedDiv meeting
-        , amountSpentDiv
+        , amountSpentDiv meeting
+        , averageSalarySelected meeting
         ]
+
+
+averageSalarySelected : Meeting -> Html Msg
+averageSalarySelected meeting =
+    text (String.fromFloat meeting.averageSalaryPerMonthPerAtendee)
 
 
 titleDiv : Html Msg
 titleDiv =
     div [ id "title" ] [ text "Meeting price counter" ]
+
+
+averageSalaryDiv : Html Msg
+averageSalaryDiv =
+    let
+        targetSelectedValue : Decoder String
+        targetSelectedValue =
+            at [ "target", "value" ] string
+
+        onSelect : (String -> msg) -> Html.Attribute msg
+        onSelect msg =
+            on "change" (map msg targetSelectedValue)
+    in
+    div [ id "averageSalary" ]
+        [ text "Whats is the average salary per month per participant?"
+        , select [ disabled False, id "averageSalarySelect", onSelect AverageSalarySelected ]
+            (List.map
+                (\amount ->
+                    option [ value amount ]
+                        [ text
+                            ("$" ++ amount ++ " dollars")
+                        ]
+                )
+                [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000", "18000", "22000", "30000" ]
+            )
+        ]
 
 
 startButtonDiv : Meeting -> Html Msg
@@ -187,14 +244,18 @@ timeElapsedDiv meeting =
         ]
 
 
-amountSpentDiv : Html Msg
-amountSpentDiv =
+amountSpentDiv : Meeting -> Html Msg
+amountSpentDiv meeting =
+    let
+        amountSpentAsString =
+            String.fromFloat meeting.amountSpent
+    in
     div []
         [ span [ id "amountSpentTitle" ]
             [ text "Amount spent: "
             ]
         , span
             [ id "amountSpent" ]
-            [ text "0"
+            [ text amountSpentAsString
             ]
         ]
