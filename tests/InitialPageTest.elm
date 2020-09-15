@@ -68,11 +68,23 @@ suite =
                         |> Query.find [ Selector.id "averageSalarySelect", Selector.disabled False ]
                         |> Query.has
                             (List.map
-                                (\value ->
+                                (\amount ->
                                     Selector.text
-                                        ("$" ++ value ++ " dollars")
+                                        ("$" ++ amount ++ " dollars")
                                 )
                                 [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000" ]
+                            )
+            , test "a number of atendees select" <|
+                \_ ->
+                    emptyMeetingHtml
+                        |> Query.find [ Selector.id "numberOfAtendeesSelect", Selector.disabled False ]
+                        |> Query.has
+                            (List.map
+                                (\numberOfAtendees ->
+                                    Selector.text
+                                        (String.fromInt numberOfAtendees)
+                                )
+                                (List.range 1 100)
                             )
             ]
         , describe "in the initial model"
