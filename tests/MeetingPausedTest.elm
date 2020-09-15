@@ -56,16 +56,6 @@ suite =
                     pausedMeetingWithTimeElapsedHtml
                         |> Query.find [ Selector.id "resetButton" ]
                         |> Query.has [ Selector.disabled False ]
-            , test "an enabled 'Start counting' button" <|
-                \_ ->
-                    pausedMeetingHtml
-                        |> Query.find [ Selector.id "startButton" ]
-                        |> Query.has [ Selector.disabled False ]
-            , test "a disabled 'Pause' button" <|
-                \_ ->
-                    pausedMeetingHtml
-                        |> Query.find [ Selector.id "pauseButton" ]
-                        |> Query.has [ Selector.disabled True ]
             ]
         , describe "actions should result in"
             [ test "when 1 second elapses, should keep the same amount of time elapsed" <|
