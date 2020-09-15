@@ -7,3 +7,6 @@ build
 .coverage
 # node
 node_modules
+# firebase
+.firebase
+.firebaserc
