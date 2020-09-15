@@ -109,10 +109,13 @@ update msg meeting =
                         let
                             amountSpendInThisElapsedSecond =
                                 meeting.averageSalaryPerMonthPerAtendee / 60 / 60 / 20
+
+                            numberOfAtendessAsFloat =
+                                toFloat meeting.numberOfAtendees
                         in
                         { meeting
                             | timeElapsed = addOneSecond meeting.timeElapsed
-                            , amountSpent = meeting.amountSpent + amountSpendInThisElapsedSecond
+                            , amountSpent = meeting.amountSpent + (amountSpendInThisElapsedSecond * numberOfAtendessAsFloat)
                         }
 
                     else

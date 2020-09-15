@@ -60,11 +60,14 @@ suite =
                 , test "increment the current amount spent when a second is elapsed" <|
                     \_ ->
                         let
-                            startedMeetingWithHighAverageSalary =
-                                { startedMeetingWithNoTimeElapsed | averageSalaryPerMonthPerAtendee = 30000 }
+                            startedMeetingWithHighAverageSalaryOnePerson =
+                                { startedMeetingWithNoTimeElapsed
+                                    | averageSalaryPerMonthPerAtendee = 30000
+                                    , numberOfAtendees = 1
+                                }
 
                             ( updatedMeeting, _ ) =
-                                update (Tick oneSecondInPosix) startedMeetingWithHighAverageSalary
+                                update (Tick oneSecondInPosix) startedMeetingWithHighAverageSalaryOnePerson
                         in
                         Expect.within (Absolute 0.000001) updatedMeeting.amountSpent 0.416666667
                 , test "dispatch PauseCounting when clicking 'Pause' button" <|
