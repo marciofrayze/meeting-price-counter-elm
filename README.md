@@ -4,6 +4,8 @@
 
 **This is a work in progress.**
 
+Preliminary version (no css/layout yet) available at: [https://meeting-price-counter.web.app/](https://meeting-price-counter.web.app/)
+
 ## What is this?
 
 As the name implies, this will be a simple web app where you can count how much money is being spent on a meeting.
