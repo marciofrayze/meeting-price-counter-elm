@@ -16,6 +16,11 @@ if ! [ -x "$(command -v firebase)" ]; then
   echo "Please install firebase-tools first: npm -g install firebase-tools"
 fi
 
+if [ `git log --pretty=%H ...refs/heads/master^` = `git ls-remote origin -h refs/heads/master |cut -f1` ]; then
+  echo "Your local version is different from the remote. Please commit/push/stash and try again."
+  exit 1
+fi
+
 set -e
 
 elm-test
