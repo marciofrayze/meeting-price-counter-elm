@@ -4,15 +4,16 @@ import Browser
 import Html exposing (Html, button, div, option, select, span, text)
 import Html.Attributes exposing (disabled, id, value)
 import Html.Events exposing (on, onClick)
-import Json.Decode exposing (Decoder, at, field, int, map, string)
+import Json.Decode exposing (Decoder, at, map, string)
 import Time exposing (toSecond, utc)
-import TimeHelper exposing (..)
+import TimeHelper exposing (addOneSecond, formatTime, timeElapsedInSeconds, zeroSecondsInPosix)
 
 
 
 -- MAIN
 
 
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -35,6 +36,7 @@ type alias Meeting =
     , timeElapsed : Time.Posix
     , timerStatus : TimerStatus
     , averageSalaryPerMonthPerAtendee : Salary
+    , numberOfAtendees : Int
     }
 
 
@@ -54,6 +56,7 @@ type Msg
     | PauseCounting
     | ResetCounting
     | AverageSalarySelected String
+    | NumberOfAtendeesSelected String
     | Tick Time.Posix
 
 
@@ -69,7 +72,7 @@ initialModel =
 
 emptyMeeting : Meeting
 emptyMeeting =
-    Meeting 0 (Time.millisToPosix 0) Paused 0
+    Meeting 0 (Time.millisToPosix 0) Paused 0 0
 
 
 
@@ -121,6 +124,13 @@ update msg meeting =
                             String.toFloat selectedAverageSalary
                                 |> Maybe.withDefault 0
                     }
+
+                NumberOfAtendeesSelected selectedNumberOfAtendees ->
+                    { meeting
+                        | numberOfAtendees =
+                            String.toInt selectedNumberOfAtendees
+                                |> Maybe.withDefault 1
+                    }
     in
     ( updatedMeeting, Cmd.none )
 
@@ -142,6 +152,7 @@ view : Model -> Html Msg
 view meeting =
     div []
         [ titleDiv
+        , numberOfAtendeesDiv
         , averageSalaryDiv
         , startButtonDiv meeting
         , pauseButtonDiv meeting
@@ -149,12 +160,24 @@ view meeting =
         , timeElapsedDiv meeting
         , amountSpentDiv meeting
         , averageSalarySelected meeting
+        , numberOfAtendeesSelected meeting
         ]
 
 
 averageSalarySelected : Meeting -> Html Msg
 averageSalarySelected meeting =
-    text (String.fromFloat meeting.averageSalaryPerMonthPerAtendee)
+    div []
+        [ text "Number of average salary selected:"
+        , text (String.fromFloat meeting.averageSalaryPerMonthPerAtendee)
+        ]
+
+
+numberOfAtendeesSelected : Meeting -> Html Msg
+numberOfAtendeesSelected meeting =
+    div []
+        [ text "Number of atendees selected:"
+        , text (String.fromInt meeting.numberOfAtendees)
+        ]
 
 
 titleDiv : Html Msg
@@ -184,6 +207,34 @@ averageSalaryDiv =
                         ]
                 )
                 [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000", "18000", "22000", "30000" ]
+            )
+        ]
+
+
+numberOfAtendeesDiv : Html Msg
+numberOfAtendeesDiv =
+    let
+        targetSelectedValue : Decoder String
+        targetSelectedValue =
+            at [ "target", "value" ] string
+
+        onSelect : (String -> msg) -> Html.Attribute msg
+        onSelect msg =
+            on "change" (map msg targetSelectedValue)
+
+        listOfNumberOfAtendees =
+            List.map (\numberOfAtendees -> String.fromInt numberOfAtendees) (List.range 0 100)
+    in
+    div [ id "numberOfAtendees" ]
+        [ text "Number of atendess:"
+        , select [ disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
+            (List.map
+                (\amount ->
+                    option [ value amount ]
+                        [ text amount
+                        ]
+                )
+                listOfNumberOfAtendees
             )
         ]
 
