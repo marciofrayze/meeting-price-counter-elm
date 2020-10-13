@@ -1,18 +1,21 @@
 #!/bin/sh
 
+set -euo pipefail
+
 if ! [ -x "$(command -v elm)" ]; then
   echo "Please install elm first: npm -g install elm"
+  exit -1
 fi
 
 if ! [ -x "$(command -v elm-test)" ]; then
   echo "Please install elm-test first: npm -g install elm-test"
+  exit -1
 fi
 
 if ! [ -x "$(command -v uglifyjs)" ]; then
   echo "Please install uglify-js first: npm -g install uglify-js"
+  exit -1
 fi
-
-set -e
 
 elm-test
 
