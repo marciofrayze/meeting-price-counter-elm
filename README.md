@@ -22,7 +22,7 @@ This project was created so I could learn more about the [elm programming langua
 
 ## Recommended dependencies
 ```
- npm install -g elm elm-test elm-oracle elm-format
+ npm install -g elm elm-test elm-oracle elm-format elm-json
 ```
 
 ## How to run the tests
@@ -43,4 +43,9 @@ elm-coverage --open
 elm reactor
 
 Then go to http://localhost:8000/src/Main.elm
+```
+
+## How to upgrade all dependencies
+```
+elm-json upgrade
 ```
