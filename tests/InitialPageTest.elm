@@ -1,6 +1,7 @@
 module InitialPageTest exposing (..)
 
 import Expect exposing (Expectation)
+import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, view)
 import Test exposing (..)
 import Test.Html.Event as Event
@@ -14,6 +15,7 @@ suite =
     let
         emptyMeetingHtml =
             view emptyMeeting
+                |> toUnstyled
                 |> Query.fromHtml
     in
     describe "On initial page"

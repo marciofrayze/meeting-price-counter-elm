@@ -1,9 +1,11 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, option, select, span, text)
-import Html.Attributes exposing (disabled, id, value)
-import Html.Events exposing (on, onClick)
+import Css exposing (..)
+import Html
+import Html.Styled exposing (..)
+import Html.Styled.Attributes exposing (css, id, src, value)
+import Html.Styled.Events exposing (on, onClick)
 import Json.Decode exposing (Decoder, at, map, string)
 import Time exposing (toSecond, utc)
 import TimeHelper exposing (addOneSecond, formatTime, timeElapsedInSeconds, zeroSecondsInPosix)
@@ -17,7 +19,7 @@ main : Program () Model Msg
 main =
     Browser.element
         { init = init
-        , view = view
+        , view = view >> toUnstyled
         , update = update
         , subscriptions = subscriptions
         }
@@ -185,7 +187,20 @@ numberOfAtendeesSelected meeting =
 
 titleDiv : Html Msg
 titleDiv =
-    div [ id "title" ] [ text "Meeting price counter" ]
+    let
+        titleCss =
+            css
+                [ display inlineBlock
+                , padding (px 20)
+
+                --                , border3 (px 5) solid (rgb 120 120 120)
+                ]
+    in
+    div
+        [ id "title"
+        , titleCss
+        ]
+        [ text "Meeting price counter" ]
 
 
 averageSalaryDiv : Html Msg
@@ -195,13 +210,13 @@ averageSalaryDiv =
         targetSelectedValue =
             at [ "target", "value" ] string
 
-        onSelect : (String -> msg) -> Html.Attribute msg
+        onSelect : (String -> msg) -> Html.Styled.Attribute msg
         onSelect msg =
-            on "change" (map msg targetSelectedValue)
+            on "change" (Json.Decode.map msg targetSelectedValue)
     in
     div [ id "averageSalary" ]
         [ text "Whats is the average salary per month per participant?"
-        , select [ disabled False, id "averageSalarySelect", onSelect AverageSalarySelected ]
+        , select [ Html.Styled.Attributes.disabled False, id "averageSalarySelect", onSelect AverageSalarySelected ]
             (List.map
                 (\amount ->
                     option [ value amount ]
@@ -221,16 +236,16 @@ numberOfAtendeesDiv =
         targetSelectedValue =
             at [ "target", "value" ] string
 
-        onSelect : (String -> msg) -> Html.Attribute msg
+        onSelect : (String -> msg) -> Html.Styled.Attribute msg
         onSelect msg =
-            on "change" (map msg targetSelectedValue)
+            on "change" (Json.Decode.map msg targetSelectedValue)
 
         listOfNumberOfAtendees =
             List.map (\numberOfAtendees -> String.fromInt numberOfAtendees) (List.range 0 100)
     in
     div [ id "numberOfAtendees" ]
         [ text "Number of atendess:"
-        , select [ disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
+        , select [ Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
             (List.map
                 (\amount ->
                     option [ value amount ]
@@ -251,7 +266,7 @@ startButtonDiv meeting =
     button
         [ id "startButton"
         , onClick StartCounting
-        , disabled isDisabled
+        , Html.Styled.Attributes.disabled isDisabled
         ]
         [ text "Start counting" ]
 
@@ -265,7 +280,7 @@ pauseButtonDiv meeting =
     button
         [ id "pauseButton"
         , onClick PauseCounting
-        , disabled isDisabled
+        , Html.Styled.Attributes.disabled isDisabled
         ]
         [ text "Pause" ]
 
@@ -280,7 +295,7 @@ resetButtonDiv meeting =
     button
         [ id "resetButton"
         , onClick ResetCounting
-        , disabled isDisabled
+        , Html.Styled.Attributes.disabled isDisabled
         ]
         [ text "Reset" ]
 

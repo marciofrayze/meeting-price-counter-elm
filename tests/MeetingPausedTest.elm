@@ -1,6 +1,7 @@
 module MeetingPausedTest exposing (..)
 
 import Expect exposing (Expectation)
+import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, update, view)
 import Test exposing (..)
 import Test.Html.Event as Event
@@ -17,6 +18,7 @@ suite =
 
         pausedMeetingHtml =
             view pausedMeeting
+                |> toUnstyled
                 |> Query.fromHtml
 
         pausedMeetingWithTimeElapsed =
@@ -26,6 +28,7 @@ suite =
 
         pausedMeetingWithTimeElapsedHtml =
             view pausedMeetingWithTimeElapsed
+                |> toUnstyled
                 |> Query.fromHtml
 
         pausedMeetingWithTimeElapsedAndSomeAmountSpent =

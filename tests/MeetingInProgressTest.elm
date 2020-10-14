@@ -1,6 +1,7 @@
 module MeetingInProgressTest exposing (..)
 
 import Expect exposing (Expectation, FloatingPointTolerance(..))
+import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, update, view)
 import Test exposing (..)
 import Test.Html.Event as Event
@@ -23,10 +24,12 @@ suite =
 
         startedMeetingWithNoTimeElapsedHtml =
             view startedMeetingWithNoTimeElapsed
+                |> toUnstyled
                 |> Query.fromHtml
 
         startedMeetingWithOneSecondElapsedHtml =
             view startedMeetingWithOneSecondElapsed
+                |> toUnstyled
                 |> Query.fromHtml
     in
     describe "In a on progress meeting"
