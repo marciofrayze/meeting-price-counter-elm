@@ -20,12 +20,7 @@ if ! [ -x "$(command -v firebase)" ]; then
   exit -1
 fi
 
-if ! [ -x "$(command -v diff-so-fancy)" ]; then
-  echo "Please install firebase-tools first: npm -g install diff-so-fancy"
-  exit -1
-fi
-
-if [ `git log --pretty=%H ...refs/heads/master^` = `git ls-remote origin -h refs/heads/master |cut -f1` ]; then
+if [[ `git status --porcelain` ]]; then
   echo "Your local version is different from the remote. Please commit/push/stash and try again."
   exit -1
 fi
