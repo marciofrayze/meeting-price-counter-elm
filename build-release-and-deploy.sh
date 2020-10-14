@@ -45,4 +45,4 @@ echo "Gzipped size: $(cat $min | gzip -c | wc -c) bytes"
 echo "Files available at build folder."
 
 echo "Deploying to firebase..."
-firebase deploy
+firebase deploy --project meeting-price-counter
