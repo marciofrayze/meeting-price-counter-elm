@@ -2,27 +2,27 @@
 
 if ! [ -x "$(command -v elm)" ]; then
   echo "Please install elm first: npm -g install elm"
-  exit -1
+  exit 1
 fi
 
 if ! [ -x "$(command -v elm-test)" ]; then
   echo "Please install elm-test first: npm -g install elm-test"
-  exit -1
+  exit 1
 fi
 
 if ! [ -x "$(command -v uglifyjs)" ]; then
   echo "Please install uglify-js first: npm -g install uglify-js"
-  exit -1
+  exit 1
 fi
 
 if ! [ -x "$(command -v firebase)" ]; then
   echo "Please install firebase-tools first: npm -g install firebase-tools"
-  exit -1
+  exit 1
 fi
 
 if [[ `git status --porcelain` ]]; then
   echo "Your local version is different from the remote. Please commit/push/stash and try again."
-  exit -1
+  exit 1
 fi
 
 set -e
