@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import AmountSpentFormatter exposing (formatAmountSpent)
 import Browser
 import Css exposing (..)
 import Html
@@ -315,16 +316,13 @@ timeElapsedDiv meeting =
 
 amountSpentDiv : Meeting -> Html Msg
 amountSpentDiv meeting =
-    let
-        amountSpentAsString =
-            String.fromFloat meeting.amountSpent
-    in
     div []
         [ span [ id "amountSpentTitle" ]
             [ text "Amount spent: "
             ]
         , span
             [ id "amountSpent" ]
-            [ text amountSpentAsString
+            [ formatAmountSpent meeting.amountSpent
+                |> text
             ]
         ]
