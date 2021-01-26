@@ -8,8 +8,8 @@ import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, id, value)
 import Html.Styled.Events exposing (on, onClick)
 import Json.Decode exposing (Decoder, at, string)
-import Time exposing (toSecond, utc)
-import TimeFormatter exposing (addOneSecond, formatTime, zeroSecondsInPosix)
+import Time
+import TimeFormatter exposing (addOneSecond, zeroSecondsInPosix)
 
 
 
@@ -165,8 +165,6 @@ view meeting =
         , resetButtonDiv meeting
         , timeElapsedDiv meeting
         , amountSpentDiv meeting
-        , averageSalarySelected meeting
-        , numberOfAtendeesSelected meeting
         ]
 
 
