@@ -1,6 +1,6 @@
 module TimeHelper exposing (..)
 
-import Time exposing (toSecond, utc)
+import Time exposing (toHour, toMinute, toSecond, utc)
 
 
 zeroSecondsInPosix : Time.Posix
@@ -15,9 +15,12 @@ oneSecondInPosix =
 
 formatTime : Time.Posix -> String
 formatTime time =
-    time
-        |> Time.toSecond Time.utc
-        |> String.fromInt
+    let
+        formatTimeDigit digit =
+            String.fromInt digit
+                |> String.pad 2 '0'
+    in
+    formatTimeDigit (toHour utc time) ++ ":" ++ formatTimeDigit (toMinute utc time) ++ ":" ++ formatTimeDigit (toSecond utc time)
 
 
 addOneSecond : Time.Posix -> Time.Posix
@@ -25,8 +28,3 @@ addOneSecond time =
     Time.posixToMillis time
         + 1000
         |> Time.millisToPosix
-
-
-timeElapsedInSeconds : Time.Posix -> Int
-timeElapsedInSeconds timeElapsed =
-    toSecond utc timeElapsed

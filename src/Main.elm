@@ -4,11 +4,11 @@ import Browser
 import Css exposing (..)
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (css, id, src, value)
+import Html.Styled.Attributes exposing (css, id, value)
 import Html.Styled.Events exposing (on, onClick)
-import Json.Decode exposing (Decoder, at, map, string)
+import Json.Decode exposing (Decoder, at, string)
 import Time exposing (toSecond, utc)
-import TimeHelper exposing (addOneSecond, formatTime, timeElapsedInSeconds, zeroSecondsInPosix)
+import TimeHelper exposing (addOneSecond, formatTime, zeroSecondsInPosix)
 
 
 
@@ -289,7 +289,7 @@ resetButtonDiv : Meeting -> Html Msg
 resetButtonDiv meeting =
     let
         isDisabled =
-            (timeElapsedInSeconds meeting.timeElapsed == 0)
+            (meeting.timeElapsed == zeroSecondsInPosix)
                 || (meeting.timerStatus /= Paused)
     in
     button
