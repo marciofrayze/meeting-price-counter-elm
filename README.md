@@ -17,12 +17,12 @@ This project was created so I could learn more about the [elm programming langua
 
 ## Minimum requirements
 ```
- npm install -g elm elm-test
+npm install -g elm elm-test
 ```
 
 ## Recommended dependencies
 ```
- npm install -g elm elm-test elm-oracle elm-format elm-json
+npm install -g elm elm-test elm-oracle elm-format elm-json @elm-tooling/elm-language-server
 ```
 
 ## How to run the tests
