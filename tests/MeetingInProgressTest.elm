@@ -7,7 +7,7 @@ import Test exposing (..)
 import Test.Html.Event as Event
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import TimeHelper exposing (..)
+import TimeFormatter exposing (..)
 
 
 suite : Test
@@ -16,11 +16,17 @@ suite =
         startedMeetingWithOneSecondElapsed =
             { emptyMeeting
                 | timerStatus = Started
-                , timeElapsed = TimeHelper.oneSecondInPosix
+                , timeElapsed = oneSecondInPosix
             }
 
         startedMeetingWithNoTimeElapsed =
             { emptyMeeting | timerStatus = Started }
+
+        startedMeetingWithHighAverageSalaryOnePerson =
+            { startedMeetingWithOneSecondElapsed
+                | averageSalaryPerMonthPerAtendee = 30000
+                , numberOfAtendees = 1
+            }
 
         startedMeetingWithNoTimeElapsedHtml =
             view startedMeetingWithNoTimeElapsed
@@ -52,6 +58,11 @@ suite =
                     startedMeetingWithNoTimeElapsedHtml
                         |> Query.find [ Selector.id "pauseButton" ]
                         |> Query.has [ Selector.disabled False ]
+            , test "an amount spent" <|
+                \_ ->
+                    startedMeetingWithNoTimeElapsedHtml
+                        |> Query.find [ Selector.id "amountSpent" ]
+                        |> Query.has [ Selector.text "0" ]
             , describe "actions should result in"
                 [ test "increment of 1 second when a second is elapsed" <|
                     \_ ->
@@ -63,12 +74,6 @@ suite =
                 , test "increment the current amount spent when a second is elapsed" <|
                     \_ ->
                         let
-                            startedMeetingWithHighAverageSalaryOnePerson =
-                                { startedMeetingWithNoTimeElapsed
-                                    | averageSalaryPerMonthPerAtendee = 30000
-                                    , numberOfAtendees = 1
-                                }
-
                             ( updatedMeeting, _ ) =
                                 update (Tick oneSecondInPosix) startedMeetingWithHighAverageSalaryOnePerson
                         in

@@ -1,4 +1,4 @@
-module TimeHelper exposing (..)
+module TimeFormatter exposing (..)
 
 import Time exposing (toHour, toMinute, toSecond, utc)
 

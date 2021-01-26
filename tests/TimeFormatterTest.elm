@@ -1,14 +1,14 @@
-module TimeHelperTest exposing (..)
+module TimeFormatterTest exposing (..)
 
 import Expect exposing (Expectation)
 import Test exposing (..)
 import Time
-import TimeHelper exposing (..)
+import TimeFormatter exposing (..)
 
 
 suite : Test
 suite =
-    describe "Time Helpers"
+    describe "Time Formatter"
         [ describe "formating to string"
             [ test "given 0 seconds should be equal to 00:00:00" <|
                 \_ ->

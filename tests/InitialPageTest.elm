@@ -7,7 +7,7 @@ import Test exposing (..)
 import Test.Html.Event as Event
 import Test.Html.Query as Query
 import Test.Html.Selector as Selector
-import TimeHelper exposing (..)
+import TimeFormatter exposing (..)
 
 
 suite : Test

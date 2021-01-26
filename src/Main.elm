@@ -8,7 +8,7 @@ import Html.Styled.Attributes exposing (css, id, value)
 import Html.Styled.Events exposing (on, onClick)
 import Json.Decode exposing (Decoder, at, string)
 import Time exposing (toSecond, utc)
-import TimeHelper exposing (addOneSecond, formatTime, zeroSecondsInPosix)
+import TimeFormatter exposing (addOneSecond, formatTime, zeroSecondsInPosix)
 
 
 
@@ -308,7 +308,7 @@ timeElapsedDiv meeting =
             ]
         , span
             [ id "timeElapsed" ]
-            [ text (TimeHelper.formatTime meeting.timeElapsed)
+            [ text (TimeFormatter.formatTime meeting.timeElapsed)
             ]
         ]
 
