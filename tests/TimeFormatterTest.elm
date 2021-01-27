@@ -1,6 +1,6 @@
 module TimeFormatterTest exposing (..)
 
-import Expect exposing (Expectation)
+import Expect
 import Test exposing (..)
 import Time
 import TimeFormatter exposing (..)

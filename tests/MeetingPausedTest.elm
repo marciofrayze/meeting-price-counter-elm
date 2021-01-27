@@ -1,6 +1,6 @@
 module MeetingPausedTest exposing (..)
 
-import Expect exposing (Expectation)
+import Expect
 import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, update, view)
 import Test exposing (..)

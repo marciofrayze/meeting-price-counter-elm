@@ -1,7 +1,7 @@
 module AmountSpentFormatterTest exposing (..)
 
 import AmountSpentFormatter exposing (..)
-import Expect exposing (Expectation)
+import Expect
 import Test exposing (..)
 
 

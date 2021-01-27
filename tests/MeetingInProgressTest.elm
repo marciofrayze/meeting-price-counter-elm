@@ -1,6 +1,6 @@
 module MeetingInProgressTest exposing (..)
 
-import Expect exposing (Expectation, FloatingPointTolerance(..))
+import Expect exposing (FloatingPointTolerance(..))
 import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, update, view)
 import Test exposing (..)

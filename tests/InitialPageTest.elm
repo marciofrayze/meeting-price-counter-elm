@@ -1,6 +1,6 @@
 module InitialPageTest exposing (..)
 
-import Expect exposing (Expectation)
+import Expect
 import Html.Styled exposing (toUnstyled)
 import Main exposing (Msg(..), TimerStatus(..), emptyMeeting, view)
 import Test exposing (..)
