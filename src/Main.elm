@@ -177,22 +177,6 @@ view meeting =
         ]
 
 
-averageSalarySelected : Meeting -> Html Msg
-averageSalarySelected meeting =
-    div []
-        [ text "Number of average salary selected:"
-        , text (String.fromFloat meeting.averageSalaryPerMonthPerAtendee)
-        ]
-
-
-numberOfAtendeesSelected : Meeting -> Html Msg
-numberOfAtendeesSelected meeting =
-    div []
-        [ text "Number of atendees selected:"
-        , text (String.fromInt meeting.numberOfAtendees)
-        ]
-
-
 titleDiv : Html Msg
 titleDiv =
     let
