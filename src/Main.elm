@@ -156,7 +156,16 @@ subscriptions _ =
 
 view : Model -> Html Msg
 view meeting =
-    div []
+    let
+        borderCss =
+            css
+                [ border3 (px 5) solid (rgb 120 120 120)
+                , padding (px 20)
+                , margin (px 40)
+                ]
+    in
+    div
+        [ borderCss ]
         [ titleDiv
         , numberOfAtendeesDiv
         , averageSalaryDiv
@@ -187,19 +196,34 @@ numberOfAtendeesSelected meeting =
 titleDiv : Html Msg
 titleDiv =
     let
-        titleCss =
+        headerCss =
+            css
+                [ textAlign center ]
+
+        mainTitleCss =
+            css
+                [ fontSize (px 80)
+                ]
+
+        subTitleCss =
             css
                 [ display inlineBlock
                 , padding (px 20)
-
-                --                , border3 (px 5) solid (rgb 120 120 120)
+                , fontSize (px 60)
                 ]
     in
     div
-        [ id "title"
-        , titleCss
+        [ headerCss
+        , id "header"
         ]
-        [ text "Meeting price counter" ]
+        [ span [ mainTitleCss ]
+            [ text "Meeting"
+            , br [] []
+            , text "PRICE"
+            ]
+        , span [ subTitleCss ]
+            [ text "counter" ]
+        ]
 
 
 averageSalaryDiv : Html Msg
