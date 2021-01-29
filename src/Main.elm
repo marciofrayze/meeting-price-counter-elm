@@ -5,7 +5,7 @@ import Browser
 import Css exposing (..)
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (css, id, value)
+import Html.Styled.Attributes exposing (class, css, id, value)
 import Html.Styled.Events exposing (on, onClick)
 import Json.Decode exposing (Decoder, at, string)
 import Time
@@ -200,13 +200,13 @@ titleDiv =
         [ headerCss
         , id "header"
         ]
-        [ span [ mainTitleCss ]
+        [ span [ mainTitleCss, id "title" ]
             [ text "Meeting"
             , br [] []
             , text "PRICE"
+            , span [ subTitleCss ]
+                [ text "counter" ]
             ]
-        , span [ subTitleCss ]
-            [ text "counter" ]
         ]
 
 
@@ -249,18 +249,39 @@ numberOfAtendeesDiv =
 
         listOfNumberOfAtendees =
             List.map (\numberOfAtendees -> String.fromInt numberOfAtendees) (List.range 0 100)
+
+        numberOfAtendeesContainerCss =
+            css
+                [ display inlineFlex
+                , fontSize (px 30)
+                ]
+
+        numberOfAtendeesDescriptionCss =
+            css
+                [ margin2 (px 0) (px 20)
+                ]
     in
-    div [ id "numberOfAtendees" ]
-        [ text "Number of atendess:"
-        , select [ Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
-            (List.map
-                (\amount ->
-                    option [ value amount ]
-                        [ text amount
-                        ]
+    div
+        [ id "numberOfAtendeesContainer"
+        , numberOfAtendeesContainerCss
+        ]
+        [ div [ numberOfAtendeesDescriptionCss ]
+            [ text "NUMBER OF"
+            , br [] []
+            , text "ATTENDEES"
+            ]
+        , div
+            []
+            [ select [ Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
+                (List.map
+                    (\amount ->
+                        option [ value amount ]
+                            [ text amount
+                            ]
+                    )
+                    listOfNumberOfAtendees
                 )
-                listOfNumberOfAtendees
-            )
+            ]
         ]
 
 

@@ -24,7 +24,11 @@ suite =
                 \_ ->
                     emptyMeetingHtml
                         |> Query.find [ Selector.id "title" ]
-                        |> Query.has [ Selector.text "Meeting price counter" ]
+                        |> Query.has
+                            [ Selector.text "Meeting"
+                            , Selector.text "PRICE"
+                            , Selector.text "counter"
+                            ]
             , test "an enabled 'Start counting' button" <|
                 \_ ->
                     emptyMeetingHtml
