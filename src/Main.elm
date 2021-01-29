@@ -5,7 +5,7 @@ import Browser
 import Css exposing (..)
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (class, css, id, value)
+import Html.Styled.Attributes exposing (css, id, value)
 import Html.Styled.Events exposing (on, onClick)
 import Json.Decode exposing (Decoder, at, string)
 import Time
@@ -154,6 +154,30 @@ subscriptions _ =
 -- VIEW
 
 
+selectContainerCss : Attribute msg
+selectContainerCss =
+    css
+        [ display inlineFlex
+        , fontSize (px 30)
+        ]
+
+
+selectDescriptionCss : Attribute msg
+selectDescriptionCss =
+    css
+        [ minWidth (Css.em 9)
+        , margin4 (px 0) (px 0) (Css.em 1) (px 0)
+        ]
+
+
+selectCss : Attribute msg
+selectCss =
+    css
+        [ height (px 70)
+        , fontSize (px 30)
+        ]
+
+
 view : Model -> Html Msg
 view meeting =
     let
@@ -167,8 +191,7 @@ view meeting =
     div
         [ borderCss ]
         [ titleDiv
-        , numberOfAtendeesDiv
-        , averageSalaryDiv
+        , meetingInformationsForm
         , startButtonDiv meeting
         , pauseButtonDiv meeting
         , resetButtonDiv meeting
@@ -192,7 +215,6 @@ titleDiv =
         subTitleCss =
             css
                 [ display inlineBlock
-                , padding (px 20)
                 , fontSize (px 60)
                 ]
     in
@@ -210,29 +232,17 @@ titleDiv =
         ]
 
 
-averageSalaryDiv : Html Msg
-averageSalaryDiv =
+meetingInformationsForm : Html Msg
+meetingInformationsForm =
     let
-        targetSelectedValue : Decoder String
-        targetSelectedValue =
-            at [ "target", "value" ] string
-
-        onSelect : (String -> msg) -> Html.Styled.Attribute msg
-        onSelect msg =
-            on "change" (Json.Decode.map msg targetSelectedValue)
+        meetingInformationFormCss =
+            css []
     in
-    div [ id "averageSalary" ]
-        [ text "Whats is the average salary per month per participant?"
-        , select [ Html.Styled.Attributes.disabled False, id "averageSalarySelect", onSelect AverageSalarySelected ]
-            (List.map
-                (\amount ->
-                    option [ value amount ]
-                        [ text
-                            ("$" ++ amount ++ " dollars")
-                        ]
-                )
-                [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000", "18000", "22000", "30000" ]
-            )
+    div
+        [ id "meetingInformationForm", meetingInformationFormCss ]
+        [ numberOfAtendeesDiv
+        , br [] []
+        , averageSalaryDiv
         ]
 
 
@@ -249,36 +259,19 @@ numberOfAtendeesDiv =
 
         listOfNumberOfAtendees =
             List.map (\numberOfAtendees -> String.fromInt numberOfAtendees) (List.range 0 100)
-
-        numberOfAtendeesContainerCss =
-            css
-                [ display inlineFlex
-                , fontSize (px 30)
-                ]
-
-        numberOfAtendeesDescriptionCss =
-            css
-                [ margin4 (px 0) (px 50) (px 0) (px 20)
-                ]
-
-        numberOfAtendeesSelectCss =
-            css
-                [ height (px 70)
-                , fontSize (px 30)
-                ]
     in
     div
-        [ id "numberOfAtendeesContainer"
-        , numberOfAtendeesContainerCss
+        [ id "numberOfAtendees"
+        , selectContainerCss
         ]
-        [ div [ numberOfAtendeesDescriptionCss ]
+        [ div [ selectDescriptionCss ]
             [ text "NUMBER OF"
             , br [] []
             , text "ATTENDEES"
             ]
         , div
             []
-            [ select [ numberOfAtendeesSelectCss, Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
+            [ select [ selectCss, Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
                 (List.map
                     (\amount ->
                         option [ value amount ]
@@ -286,6 +279,42 @@ numberOfAtendeesDiv =
                             ]
                     )
                     listOfNumberOfAtendees
+                )
+            ]
+        ]
+
+
+averageSalaryDiv : Html Msg
+averageSalaryDiv =
+    let
+        targetSelectedValue : Decoder String
+        targetSelectedValue =
+            at [ "target", "value" ] string
+
+        onSelect : (String -> msg) -> Html.Styled.Attribute msg
+        onSelect msg =
+            on "change" (Json.Decode.map msg targetSelectedValue)
+    in
+    div
+        [ id "averageSalary"
+        , selectContainerCss
+        ]
+        [ div [ selectDescriptionCss ]
+            [ text
+                "AVERAGE"
+            , br [] []
+            , text "SALARY"
+            ]
+        , div []
+            [ select [ selectCss, Html.Styled.Attributes.disabled False, id "averageSalarySelect", onSelect AverageSalarySelected ]
+                (List.map
+                    (\amount ->
+                        option [ value amount ]
+                            [ text
+                                ("$" ++ amount ++ " dollars")
+                            ]
+                    )
+                    [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000", "18000", "22000", "30000" ]
                 )
             ]
         ]

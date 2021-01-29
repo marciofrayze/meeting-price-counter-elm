@@ -67,7 +67,7 @@ suite =
                 \_ ->
                     emptyMeetingHtml
                         |> Query.find [ Selector.id "averageSalary" ]
-                        |> Query.has [ Selector.text "Whats is the average salary per month per participant?" ]
+                        |> Query.has [ Selector.text "AVERAGE" ]
             , test "an average salary select" <|
                 \_ ->
                     emptyMeetingHtml
