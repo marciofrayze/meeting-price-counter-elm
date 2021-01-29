@@ -258,7 +258,13 @@ numberOfAtendeesDiv =
 
         numberOfAtendeesDescriptionCss =
             css
-                [ margin2 (px 0) (px 20)
+                [ margin4 (px 0) (px 50) (px 0) (px 20)
+                ]
+
+        numberOfAtendeesSelectCss =
+            css
+                [ height (px 70)
+                , fontSize (px 30)
                 ]
     in
     div
@@ -272,7 +278,7 @@ numberOfAtendeesDiv =
             ]
         , div
             []
-            [ select [ Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
+            [ select [ numberOfAtendeesSelectCss, Html.Styled.Attributes.disabled False, id "numberOfAtendeesSelect", onSelect NumberOfAtendeesSelected ]
                 (List.map
                     (\amount ->
                         option [ value amount ]
