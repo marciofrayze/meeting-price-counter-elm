@@ -216,6 +216,7 @@ titleDiv =
             css
                 [ display inlineBlock
                 , fontSize (px 60)
+                , margin2 (px 0) (px 30)
                 ]
     in
     div
