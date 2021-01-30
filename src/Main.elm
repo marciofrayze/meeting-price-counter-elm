@@ -191,12 +191,10 @@ view meeting =
     div
         [ borderCss ]
         [ titleDiv
-        , meetingInformationsForm
-        , startButtonDiv meeting
-        , pauseButtonDiv meeting
-        , resetButtonDiv meeting
-        , timeElapsedDiv meeting
+        , meetingInformationsFormDiv
         , amountSpentDiv meeting
+        , timeElapsedDiv meeting
+        , buttonsControlsDiv meeting
         ]
 
 
@@ -205,7 +203,9 @@ titleDiv =
     let
         headerCss =
             css
-                [ textAlign center ]
+                [ textAlign center
+                , padding4 (px 0) (px 0) (Css.em 3) (px 0)
+                ]
 
         mainTitleCss =
             css
@@ -233,8 +233,8 @@ titleDiv =
         ]
 
 
-meetingInformationsForm : Html Msg
-meetingInformationsForm =
+meetingInformationsFormDiv : Html Msg
+meetingInformationsFormDiv =
     let
         meetingInformationFormCss =
             css []
@@ -321,6 +321,37 @@ averageSalaryDiv =
         ]
 
 
+buttonsControlsDiv : Meeting -> Html Msg
+buttonsControlsDiv meeting =
+    let
+        buttonsControlsCss =
+            css
+                [ textAlign center
+                , marginTop (px 30)
+                ]
+    in
+    div [ buttonsControlsCss ]
+        [ startButtonDiv meeting
+        , pauseButtonDiv meeting
+        , resetButtonDiv meeting
+        ]
+
+
+bigButtonCss : Attribute msg
+bigButtonCss =
+    css [ margin (px 10) ]
+
+
+bigButtonLabel : String -> Html msg
+bigButtonLabel label =
+    let
+        bigButtonLabelCss =
+            css
+                [ fontSize (px 50) ]
+    in
+    span [ bigButtonLabelCss ] [ text label ]
+
+
 startButtonDiv : Meeting -> Html Msg
 startButtonDiv meeting =
     let
@@ -331,8 +362,9 @@ startButtonDiv meeting =
         [ id "startButton"
         , onClick StartCounting
         , Html.Styled.Attributes.disabled isDisabled
+        , bigButtonCss
         ]
-        [ text "Start counting" ]
+        [ bigButtonLabel "Start" ]
 
 
 pauseButtonDiv : Meeting -> Html Msg
@@ -345,8 +377,9 @@ pauseButtonDiv meeting =
         [ id "pauseButton"
         , onClick PauseCounting
         , Html.Styled.Attributes.disabled isDisabled
+        , bigButtonCss
         ]
-        [ text "Pause" ]
+        [ bigButtonLabel "Pause" ]
 
 
 resetButtonDiv : Meeting -> Html Msg
@@ -360,31 +393,48 @@ resetButtonDiv meeting =
         [ id "resetButton"
         , onClick ResetCounting
         , Html.Styled.Attributes.disabled isDisabled
+        , bigButtonCss
         ]
-        [ text "Reset" ]
+        [ bigButtonLabel "Reset" ]
 
 
 timeElapsedDiv : Meeting -> Html Msg
 timeElapsedDiv meeting =
-    div []
-        [ span [ id "timeElapsedTitle" ]
-            [ text "Time elapsed: "
-            ]
-        , span
-            [ id "timeElapsed" ]
-            [ text (TimeFormatter.formatTime meeting.timeElapsed)
-            ]
+    let
+        timerCss =
+            css
+                [ fontSize (px 40)
+                , textAlign center
+                ]
+    in
+    div [ id "timeElapsed", timerCss ]
+        [ text (TimeFormatter.formatTime meeting.timeElapsed)
         ]
 
 
 amountSpentDiv : Meeting -> Html Msg
 amountSpentDiv meeting =
-    div []
-        [ span [ id "amountSpentTitle" ]
-            [ text "Amount spent: "
-            ]
-        , span
-            [ id "amountSpent" ]
+    let
+        amountSpentContainerCss =
+            css
+                [ fontSize (px 100)
+                , textAlign center
+                , margin (px 20)
+                ]
+
+        amountSpentCss =
+            css
+                [ border3 (px 3) solid (rgb 120 120 120)
+                , padding (px 10)
+                , margin (px 20)
+                ]
+    in
+    div
+        [ id "amountSpent"
+        , amountSpentContainerCss
+        ]
+        [ text "$"
+        , span [ amountSpentCss ]
             [ formatAmountSpent meeting.amountSpent
                 |> text
             ]

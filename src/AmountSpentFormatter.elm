@@ -6,5 +6,8 @@ formatAmountSpent amount =
     let
         roundToTwoDecimals value =
             toFloat (round (value * 100)) / 100
+
+        amountInCents =
+            roundToTwoDecimals amount
     in
-    String.fromFloat (roundToTwoDecimals amount) ++ " dollars"
+    String.fromFloat amountInCents

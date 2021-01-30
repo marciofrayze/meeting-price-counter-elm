@@ -29,13 +29,13 @@ suite =
                             , Selector.text "PRICE"
                             , Selector.text "counter"
                             ]
-            , test "an enabled 'Start counting' button" <|
+            , test "an enabled 'Start' button" <|
                 \_ ->
                     emptyMeetingHtml
                         |> Query.has
                             [ Selector.id "pauseButton"
                             , Selector.disabled True
-                            , Selector.text "Start counting"
+                            , Selector.text "Start"
                             ]
             , test "a disabled 'Pause' button" <|
                 \_ ->
@@ -105,15 +105,7 @@ suite =
                     Expect.equal emptyMeeting.timerStatus Paused
             ]
         , describe "user actions"
-            [ describe "when clicking 'Start counting'"
-                [ test "should dispatch StartCounting" <|
-                    \_ ->
-                        emptyMeetingHtml
-                            |> Query.find [ Selector.id "startButton" ]
-                            |> Event.simulate Event.click
-                            |> Event.expect StartCounting
-                ]
-            , describe "when selecting an average 'Start counting'"
+            [ describe "when clicking 'Start'"
                 [ test "should dispatch StartCounting" <|
                     \_ ->
                         emptyMeetingHtml
