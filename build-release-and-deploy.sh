@@ -20,11 +20,6 @@ if ! [ -x "$(command -v firebase)" ]; then
   exit 1
 fi
 
-if [[ `git status --porcelain` ]]; then
-  echo "Your local version is different from the remote. Please commit/push/stash and try again."
-  exit 1
-fi
-
 set -e
 
 elm-test
