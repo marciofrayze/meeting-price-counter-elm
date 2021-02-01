@@ -3,6 +3,7 @@ module Main exposing (..)
 import AmountSpentFormatter exposing (formatAmountSpent)
 import Browser
 import Css exposing (..)
+import Css.ModernNormalize as ModernNormalize
 import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, id, value)
@@ -165,7 +166,7 @@ selectContainerCss =
 selectDescriptionCss : Attribute msg
 selectDescriptionCss =
     css
-        [ minWidth (Css.em 9)
+        [ minWidth (Css.em 10)
         , margin4 (px 0) (px 0) (Css.em 1.2) (px 0)
         ]
 
@@ -173,8 +174,11 @@ selectDescriptionCss =
 selectCss : Attribute msg
 selectCss =
     css
-        [ height (px 70)
+        [ height (Css.em 2.5)
+        , minWidth (Css.em 10)
+        , minHeight (Css.em 1)
         , fontSize (px 34)
+        , backgroundColor (rgb 255 255 255)
         ]
 
 
@@ -190,7 +194,9 @@ view meeting =
     in
     div
         []
-        [ div [ borderCss ]
+        [ ModernNormalize.globalStyledHtml
+        , div
+            [ borderCss ]
             [ titleDiv
             , meetingInformationsFormDiv
             , amountSpentDiv meeting
@@ -344,7 +350,10 @@ buttonsControlsDiv meeting =
 
 bigButtonCss : Attribute msg
 bigButtonCss =
-    css [ margin (px 10) ]
+    css
+        [ margin (px 10)
+        , minHeight (Css.em 5.5)
+        ]
 
 
 bigButtonLabel : String -> Html msg
@@ -452,7 +461,7 @@ footerDiv =
         footerCss =
             css
                 [ fontSize (px 15)
-                , margin4 (px 0) (px 0) (px 0) (px 40)
+                , margin4 (px 10) (px 10) (px 20) (px 40)
                 ]
     in
     div
