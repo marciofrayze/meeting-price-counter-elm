@@ -2,9 +2,7 @@
 
 # Meeting Price Counter
 
-**This is a work in progress.**
-
-Preliminary version (no css/layout yet) available at: [https://meeting-price-counter.web.app/](https://meeting-price-counter.web.app/)
+Available at: [https://meeting-price-counter.web.app/](https://meeting-price-counter.web.app/)
 
 ## What is this?
 
