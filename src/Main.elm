@@ -158,7 +158,7 @@ selectContainerCss : Attribute msg
 selectContainerCss =
     css
         [ display inlineFlex
-        , fontSize (px 30)
+        , fontSize (px 34)
         ]
 
 
@@ -166,7 +166,7 @@ selectDescriptionCss : Attribute msg
 selectDescriptionCss =
     css
         [ minWidth (Css.em 9)
-        , margin4 (px 0) (px 0) (Css.em 1) (px 0)
+        , margin4 (px 0) (px 0) (Css.em 1.2) (px 0)
         ]
 
 
@@ -174,7 +174,7 @@ selectCss : Attribute msg
 selectCss =
     css
         [ height (px 70)
-        , fontSize (px 30)
+        , fontSize (px 34)
         ]
 
 
@@ -185,16 +185,19 @@ view meeting =
             css
                 [ border3 (px 5) solid (rgb 120 120 120)
                 , padding (px 20)
-                , margin (px 40)
+                , margin4 (px 40) (px 40) (px 0) (px 40)
                 ]
     in
     div
-        [ borderCss ]
-        [ titleDiv
-        , meetingInformationsFormDiv
-        , amountSpentDiv meeting
-        , timeElapsedDiv meeting
-        , buttonsControlsDiv meeting
+        []
+        [ div [ borderCss ]
+            [ titleDiv
+            , meetingInformationsFormDiv
+            , amountSpentDiv meeting
+            , timeElapsedDiv meeting
+            , buttonsControlsDiv meeting
+            ]
+        , footerDiv
         ]
 
 
@@ -215,7 +218,7 @@ titleDiv =
         subTitleCss =
             css
                 [ display inlineBlock
-                , fontSize (px 60)
+                , fontSize (px 80)
                 , margin2 (px 0) (px 30)
                 ]
     in
@@ -304,6 +307,8 @@ averageSalaryDiv =
             [ text
                 "AVERAGE"
             , br [] []
+            , text "MONTHLY"
+            , br [] []
             , text "SALARY"
             ]
         , div []
@@ -312,7 +317,7 @@ averageSalaryDiv =
                     (\amount ->
                         option [ value amount ]
                             [ text
-                                ("$" ++ amount ++ " dollars")
+                                ("$" ++ formatAmountSpent (Maybe.withDefault 0 (String.toFloat amount)) ++ " dollars")
                             ]
                     )
                     [ "0", "300", "500", "1000", "2000", "4000", "6000", "8000", "1000", "13000", "18000", "22000", "30000" ]
@@ -403,7 +408,7 @@ timeElapsedDiv meeting =
     let
         timerCss =
             css
-                [ fontSize (px 40)
+                [ fontSize (px 43)
                 , textAlign center
                 ]
     in
@@ -438,4 +443,21 @@ amountSpentDiv meeting =
             [ formatAmountSpent meeting.amountSpent
                 |> text
             ]
+        ]
+
+
+footerDiv : Html Msg
+footerDiv =
+    let
+        footerCss =
+            css
+                [ fontSize (px 15)
+                , margin4 (px 0) (px 0) (px 0) (px 40)
+                ]
+    in
+    div
+        [ id "footer"
+        , footerCss
+        ]
+        [ text "Don't take this website too seriously."
         ]
