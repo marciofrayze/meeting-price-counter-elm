@@ -4,7 +4,6 @@ import AmountSpentFormatter exposing (formatAmountSpent)
 import Browser
 import Css exposing (..)
 import Css.ModernNormalize as ModernNormalize
-import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, id, value)
 import Html.Styled.Events exposing (on, onClick)
