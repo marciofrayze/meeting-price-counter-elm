@@ -113,15 +113,5 @@ suite =
                             |> Event.simulate Event.click
                             |> Event.expect StartCounting
                 ]
-
-            -- TODO: Don't know how to simulate this, yet
-            -- , describe "when selecting last average salary"
-            --     [ test "should dispatch AverageSalarySelected with 30000 value" <|
-            --         \_ ->
-            --             emptyMeetingHtml
-            --                 |> Query.find [ Selector.id "averageSalarySelect" ]
-            --                 |> Event.simulate Event.click
-            --                 |> Event.expect AverageSalarySelected 30000
-            --     ]
             ]
         ]
