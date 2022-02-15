@@ -20,7 +20,7 @@ npm install -g elm elm-test
 
 ## Recommended dependencies
 ```
-npm install -g elm elm-test elm-oracle elm-format elm-json @elm-tooling/elm-language-server
+npm install -g elm elm-test elm-oracle elm-format elm-json @elm-tooling/elm-language-server elm-review
 ```
 
 ## How to run the tests
@@ -47,3 +47,10 @@ Then go to http://localhost:8000/src/Main.elm
 ```
 elm-json upgrade
 ```
+
+## Elm-review
+This project uses [elm-review](https://github.com/jfmengels/elm-review) to help find mistakes.
+```
+elm-review
+```
+The rules are configured in the `review` folder.
