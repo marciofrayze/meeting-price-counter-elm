@@ -48,6 +48,11 @@ Then go to http://localhost:8000/src/Main.elm
 elm-json upgrade
 ```
 
+If you want to update major versions (unsafe upgrade):
+```
+elm-json upgrade --unsafe
+```
+
 ## Elm-review
 This project uses [elm-review](https://github.com/jfmengels/elm-review) to help find mistakes.
 ```
