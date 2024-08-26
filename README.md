@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/marciofrayze/meeting-price-counter-elm.svg?branch=master)](https://travis-ci.com/marciofrayze/meeting-price-counter-elm)
+[![Build Status](https://app.travis-ci.com/marciofrayze/rackstep.svg?token=4aV6KjLG9kDjZAyCMyfT&branch=master)](https://travis-ci.com/marciofrayze/meeting-price-counter-elm)
 
 # Meeting Price Counter
 
