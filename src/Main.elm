@@ -68,11 +68,6 @@ type TimerStatus
     | Started
 
 
-initialModel : Model
-initialModel =
-    emptyMeeting
-
-
 emptyMeeting : Meeting
 emptyMeeting =
     Meeting 0 (Time.millisToPosix 0) Paused 0 0
